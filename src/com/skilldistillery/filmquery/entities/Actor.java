@@ -7,8 +7,12 @@ public class Actor {
 	private int actorId;
 	private String firstName;
 	private String lastName;
-	
+
 	public Actor() {
+		super();
+	}
+
+	public Actor(int actorId, String firstName, String lastName) {
 		super();
 		this.actorId = actorId;
 		this.firstName = firstName;
@@ -56,5 +60,10 @@ public class Actor {
 		return actorId == other.actorId && Objects.equals(firstName, other.firstName)
 				&& Objects.equals(lastName, other.lastName);
 	}
-	
+
+	@Override
+	public String toString() {
+		return "Actor: " + actorId + " First Name: " + firstName + " Last Name: " + lastName;
+	}
+
 }

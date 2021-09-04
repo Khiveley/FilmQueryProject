@@ -1,9 +1,10 @@
 package com.skilldistillery.filmquery.entities;
 
+import java.util.List;
 import java.util.Objects;
 
 public class Film {
-	
+
 	private int filmId;
 	private String title;
 	private String description;
@@ -15,8 +16,15 @@ public class Film {
 	private double replacementCost;
 	private String rating;
 	private String specialFeatures;
-	
+	private List<Actor> actors;
+
 	public Film() {
+		super();
+	}
+
+	public Film(int filmId, String title, String description, int releaseYear, int languageId, int rentalDuration,
+			double rentalRate, int length, double replacementCost, String rating, String specialFeatures,
+			List<Actor> actors) {
 		super();
 		this.filmId = filmId;
 		this.title = title;
@@ -29,6 +37,7 @@ public class Film {
 		this.replacementCost = replacementCost;
 		this.rating = rating;
 		this.specialFeatures = specialFeatures;
+		this.actors = actors;
 	}
 
 	public int getFilmId() {
@@ -141,7 +150,23 @@ public class Film {
 				&& Double.doubleToLongBits(replacementCost) == Double.doubleToLongBits(other.replacementCost)
 				&& Objects.equals(specialFeatures, other.specialFeatures) && Objects.equals(title, other.title);
 	}
-	
-	
-	
+
+	public List<Actor> getActors() {
+		return actors;
+	}
+
+	public void setActors(List<Actor> actors) {
+		this.actors = actors;
+	}
+
+	@Override
+	public String toString() {
+		return "Film id: " + filmId + " " + "Title: " + title + "\n" + "Description: " + description + "\n" + "\n" +
+				"Actors: " + actors + "\n" + "\n" +
+				 "Release Year: " + releaseYear + " " + "Language Id: " + languageId + " " + "Rental Duration: "
+				+ rentalDuration + " " + "Rental Rate: " + rentalRate + "\n" + "Length: " + length + " mins "
+				+ "Replacement Cost: " + replacementCost + " " + "Rating: " + rating + " " + "Special Features: "
+				+ specialFeatures + "\n" + "\n" + "All rates and costs listed in USD. Be Kind. Please Rewind.";
+	}
+
 }

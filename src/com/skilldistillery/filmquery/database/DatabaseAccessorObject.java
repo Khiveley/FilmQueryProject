@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.skilldistillery.filmquery.entities.Actor;
@@ -18,7 +20,8 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 		} catch (ClassNotFoundException e) {
-			System.err.println()
+			System.err.println("Error loading database driver:");
+			System.err.println(e);
 		}
 	}
 
@@ -26,65 +29,88 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 	public Film findFilmById(int filmId) {
 		Film film = null;
 		try {
-	    Connection conn = DriverManager.getConnection(URL, user, pass);
-	    String sql = "SELECT id, title, description, release_year, language_id, rental_duration,"+
-	    "rental_rate, length, replacement_cost, rating, special_features "
-	    		+"FROM film WHERE id = ?";
-	    PreparedStatement stmt = conn.prepareStatement(sql);
-	    stmt.setInt(1, filmId);
-	    ResultSet rs = stmt.executeQuery();
-	    if(rs.next()) {
-	    	film = new Film();
-	    	film.setFilmId(rs.getInt(1));
-	    	film.setTitle(rs.getString(2));
-	    	film.setDescription(rs.getString("description"));
-	    	film.setReleaseYear(rs.getInt("release_year"));
-	    	film.setLanguageId(rs.getInt("language_id"));
-	    	film.setRentalDuration(filmId);
-	    }
+			Connection conn = DriverManager.getConnection(URL, user, pass);
+			String sql = "SELECT id, title, description, release_year, language_id, rental_duration,"
+					+ "rental_rate, length, replacement_cost, rating, special_features " + " FROM film WHERE id = ?";
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, filmId);
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				film = new Film();
+				film.setFilmId(rs.getInt(1));
+				film.setTitle(rs.getString(2));
+				film.setDescription(rs.getString("description"));
+				film.setReleaseYear(rs.getInt("release_year"));
+				film.setLanguageId(rs.getInt("language_id"));
+				film.setRentalDuration(rs.getInt("rental_duration"));
+				film.setRentalRate(rs.getDouble("rental_rate"));
+				film.setLength(rs.getInt("length"));
+				film.setReplacementCost(rs.getDouble("replacement_cost"));
+				film.setRating(rs.getString("rating"));
+				film.setSpecialFeatures(rs.getString("special_features"));
+			}
+			rs.close();
+		    stmt.close();
+		    conn.close();
+		} catch (SQLException e) {
+			System.err.println("Database error:");
+		}
 		return film;
-		
-		rs.close();
-	    stmt.close();
-	    conn.close();
+	
 	}
 
 	@Override
 	public Actor findActorById(int actorId) {
-		String user = "student";
-	    String pass = "student";
-	    Connection conn = DriverManager.getConnection(URL, user, pass);
-	    String sqltext;
-	
-		String sql = "SELECT id, first_name, last_name FROM actor WHERE id = ?";
-		  PreparedStatement stmt = conn.prepareStatement(sql);
-		  stmt.setInt(1,actorId);
-		  ResultSet actorResult = stmt.executeQuery();
-		  if (actorResult.next()) {
-		    actor = new Actor(actorResult.getInt(1), actorResult.getString(2), actorResult.getString(3)); 
-		    actorResult.getId(actorResult."id")+ " " +
-		    actorResult.getFirstName(actorResult."first_name")+ " " +
-		    actorResult.getLastName(actorResult."last_name")+ " " +
-		    actorResult.getFilms(findFilmsByActorId(actorId));
-		return null;
-		 actorResult.close();
-		    stmt.close();
-		    conn.close();
-	}
-		 
+		Actor actor = null;
+		try {
+			Connection conn = DriverManager.getConnection(URL, user, pass);
+			String sql = "SELECT id, first_name, last_name"
+					+ " FROM actor WHERE id = ?";
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, actorId);
+			ResultSet as = stmt.executeQuery();
+			if (as.next()) {
+		    actor = new Actor(); 
+		    actor.setActorId(as.getInt("id"));
+		    actor.setFirstName(as.getString("first_name"));
+		    actor.setLastName(as.getString("last_name"));
+			}
+			 as.close();
+			 stmt.close();
+			 conn.close();
+		} catch (SQLException e) {
+			System.err.println("Database error:");
+		}
+		return actor;
+		
 	}
 
 	@Override
 	public List<Actor> findActorsByFilmId(int filmId) {
-		String user = "student";
-	    String pass = "student";
-	    Connection conn = DriverManager.getConnection(URL, user, pass);
-	    String sqltext;
-		return null;
-		
-		actorResult.close();
-	    stmt.close();
-	    conn.close();
+		List<Actor> actors = new ArrayList<>();
+		try {
+			Connection conn = DriverManager.getConnection(URL, user, pass);
+			String sql = "SELECT actor.id, actor.first_name, actor.last_name " +
+			"FROM actor JOIN film_actor ON actor.id = film_actor.actor_id " +
+			"WHERE film_actor.film_id = ?";
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, filmId);
+			ResultSet af = stmt.executeQuery();
+			while (af.next()) {
+				Actor actor = new Actor(); 
+				actor.setActorId(af.getInt("id"));
+			    actor.setFirstName(af.getString("first_name"));
+			    actor.setLastName(af.getString("last_name"));
+			    actors.add(actor);
+			}
+			System.out.println(actors);
+			af.close();
+		    stmt.close();
+		    conn.close();
+		} catch (SQLException e) {
+			System.err.println("Database error:");
+		}
+		return actors;
 	}
 
 }
