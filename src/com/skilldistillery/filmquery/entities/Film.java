@@ -15,6 +15,7 @@ public class Film {
 	private int length;
 	private double replacementCost;
 	private String rating;
+	private String language;
 	private String specialFeatures;
 	private List<Actor> actors;
 
@@ -36,6 +37,7 @@ public class Film {
 		this.length = length;
 		this.replacementCost = replacementCost;
 		this.rating = rating;
+		this.setLanguage(language);
 		this.specialFeatures = specialFeatures;
 		this.actors = actors;
 	}
@@ -74,6 +76,14 @@ public class Film {
 
 	public int getLanguageId() {
 		return languageId;
+	}
+
+	public String getLanguage() {
+		return language;
+	}
+
+	public void setLanguage(String language) {
+		this.language = language;
 	}
 
 	public void setLanguageId(int languageId) {
@@ -127,15 +137,17 @@ public class Film {
 	public void setSpecialFeatures(String specialFeatures) {
 		this.specialFeatures = specialFeatures;
 	}
-	
+
 	public String showFilmInformation() {
-		String information = "Title: " + title + "Release Year: " + releaseYear + "Rating: " + rating + "Description: " + description;
+		String information = "Title: " + title + "Release Year: " + releaseYear + "Rating: " + rating + "Description: "
+				+ description;
 		return information;
 	}
-	
+
 	public String fullInformation() {
-		String full = "Title:" + title + "Release Year: " + releaseYear + "Rating: " + rating + "Length: " + length + "mins" + 
-	"Rental Duration: " + rentalDuration + "days" + "Rental Rate: " + rentalRate + "Description: " + description;
+		String full = "Title:" + title + "Release Year: " + releaseYear + "Rating: " + rating + "Length: " + length
+				+ "mins" + "Rental Duration: " + rentalDuration + "days" + "Rental Rate: " + rentalRate
+				+ "Description: " + description;
 		return full;
 	}
 
@@ -161,7 +173,7 @@ public class Film {
 				&& Double.doubleToLongBits(replacementCost) == Double.doubleToLongBits(other.replacementCost)
 				&& Objects.equals(specialFeatures, other.specialFeatures) && Objects.equals(title, other.title);
 	}
- 
+
 	public List<Actor> getActors() {
 		return actors;
 	}
@@ -172,12 +184,30 @@ public class Film {
 
 	@Override
 	public String toString() {
-		return "Film id: " + filmId + " " + "Title: " + title + "\n" + "Description: " + description + "\n" + "\n" +
-				"Actors: " + actors + "\n" + "\n" +
-				 "Release Year: " + releaseYear + " " + "Language Id: " + languageId + " " + "Rental Duration: "
-				+ rentalDuration + " " + "Rental Rate: " + rentalRate + "\n" + "Length: " + length + " mins "
-				+ "Replacement Cost: " + replacementCost + " " + "Rating: " + rating + " " + "Special Features: "
-				+ specialFeatures + "\n" + "\n" + "All rates and costs listed in USD. Be Kind. Please Rewind.";
+		if (actors.size() == 0) {
+			return "Film id: " + filmId + " " + "Title: " + title + "\n" + "Description: " + description + "\n" + "\n"
+					+ "Release Year: " + releaseYear + " " + "Language Id: " + languageId + " " + "Rental Duration: "
+					+ rentalDuration + " " + "Rental Rate: " + rentalRate + "\n" + "Length: " + length + " mins "
+					+ "Replacement Cost: " + replacementCost + " " + "Rating: " + rating + " " + "Special Features: "
+					+ specialFeatures + "\n" + "\n" + "All rates and costs listed in USD. Be Kind. Please Rewind.";
+		} else {
+			StringBuilder sb = new StringBuilder("Film [id=").append(filmId).append(", title=").append(title)
+					.append(", description=").append(description).append(", releaseYear=").append(releaseYear)
+					.append(", languageId=").append(languageId).append(", rentalDuration=").append(rentalDuration)
+					.append(", rentalRate=").append(rentalRate).append(", specialFeatures=").append(specialFeatures)
+					.append(", language=").append(language).append(", actors=");
+			for (Actor actor : actors) {
+				sb.append(actor.getActorFullName() + ", ");
+			}
+			sb.delete(sb.length() - 2, sb.length());
+			sb.append("]");
+			return sb.toString();
+		}
+	}
+
+	public void setName(String string) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

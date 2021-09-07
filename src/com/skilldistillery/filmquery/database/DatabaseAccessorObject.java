@@ -30,15 +30,22 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 		Film film = null;
 		try {
 			Connection conn = DriverManager.getConnection(URL, user, pass);
+//			String sql = "SELECT id, title, description, release_year, language_id, rental_duration,"
+//					+ "rental_rate, length, replacement_cost, rating, special_features " +
+//					+ "JOIN language ON film.language_id = language.id  "
+//					" FROM film WHERE film.id = ?";
+			
 			String sql = "SELECT id, title, description, release_year, language_id, rental_duration,"
-					+ "rental_rate, length, replacement_cost, rating, special_features " + " FROM film WHERE id = ?";
+					+ "rental_rate, length, replacement_cost, rating, special_features "
+					+ "JOIN language ON film.language_id = language.id  "
+					+ "WHERE film.id = ?";
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, filmId);
 			ResultSet rs = stmt.executeQuery();
 			if (rs.next()) {
 				film = new Film();
-				film.setFilmId(rs.getInt(1));
-				film.setTitle(rs.getString(2));
+				film.setFilmId(rs.getInt("id"));
+				film.setTitle(rs.getString("title"));
 				film.setDescription(rs.getString("description"));
 				film.setReleaseYear(rs.getInt("release_year"));
 				film.setLanguageId(rs.getInt("language_id"));
@@ -48,6 +55,7 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 				film.setReplacementCost(rs.getDouble("replacement_cost"));
 				film.setRating(rs.getString("rating"));
 				film.setSpecialFeatures(rs.getString("special_features"));
+				film.setName(rs.getString("name"));
 			}
 			rs.close();
 			stmt.close();

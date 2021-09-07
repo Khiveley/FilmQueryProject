@@ -24,9 +24,9 @@ public class FilmQueryApp {
 //    for (Actor actor : actors) {
 //	}
 //    film.setActors(actors);
-//  
+////  
 //   System.out.println(film);
-//   
+////   
 //  }
 
 	private void launch() {
@@ -59,8 +59,8 @@ public class FilmQueryApp {
 		case 1:
 			printFilmIdMenu();
 			try {
-//				System.out.println("What is the film's id?");
 				int id = input.nextInt();
+				input.nextLine();
 				Film film = db.findFilmById(id);
 				if (film != null) {
 					runFilmSubmenu(input, film, null);
@@ -111,6 +111,7 @@ public class FilmQueryApp {
 			} else {
 				for (Film film : list) {
 					System.out.println(film.toString());
+					System.out.println("---------");
 				}
 			}
 			break;
@@ -126,20 +127,35 @@ public class FilmQueryApp {
 			System.out.println("Sorry, I am unable to locate a film by your search term.");
 		} else {
 			for (Film film : films) {
-				displayFilmInformation(film);
+				displayFilm(film);
 			}
 		}
 		return films;
 	}
 
-	private void displayFilmInformation(Film film) {
-		System.out.println(film.fullInformation());
-		List <Actor> actors = db.findActorsByFilmId(1);
-		for (Actor actor : film.getActors()) {
+	private Film findFilmById(int id) {
+		Film film = db.findFilmById(1);;
+		if (film == null) {
+			System.out.println("I am unable to locate any movies by that specific id.");
+		} else {
+			displayFilm(film);
 		}
+		return film;
+	}
+	private void displayFilm(Film f) {
+		StringBuilder sb = new StringBuilder("Title: ").append(f.getTitle())
+								.append("\nYear Released: ").append(f.getReleaseYear())
+								.append("\nRating: ").append(f.getRating())
+								.append("\nLanguage: ").append(f.getLanguage())
+								.append("\nDescription: ").append(f.getDescription())
+								.append("\nActors: ");
+		for (Actor actor : f.getActors()) {
+			sb.append(actor.getActorFullName() + ", ");
 		}
-	
-		
+		sb.delete(sb.length()-2, sb.length());
+		System.out.println(sb.toString());
+	}
+
 	private void printSubMenu() {
 		System.out.println("******************************************");
 		System.out.println("*            What's next?                *");
