@@ -116,19 +116,18 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 		List<Film> films = new ArrayList<Film>();
 		try {
 			Connection conn = DriverManager.getConnection(URL, user, pass);
-			String sql = "SELECT id, title, description, release_year, language_id, rental_duration,\"\n"
-					+ "rental_rate, length, replacement_cost, rating, special_features FROM film WHERE (title LIKE ?) OR description LIKE ?)";
-			PreparedStatement stmt = conn.prepareStatement(sql);
-			stmt.setString(1, "%" + k + "%");
-			stmt.setString(2, "%" + k + "%");
-			ResultSet kw = stmt.executeQuery();
-			while (kw.next()) {
-				int id = kw.getInt("id");
+			String sql = "SELECT * FROM film WHERE (title LIKE ?) OR (description LIKE ?)";
+			PreparedStatement kw = conn.prepareStatement(sql);
+			kw.setString(1, "%" + k + "%");
+			kw.setString(2, "%" + k + "%");
+			ResultSet rs = kw.executeQuery();
+			while (rs.next()) {
+				int id = rs.getInt("id");
 				Film film = findFilmById(id);
 				films.add(film);
 			}
 			kw.close();
-			stmt.close();
+			rs.close();
 			conn.close();
 		} catch (SQLException e) {
 			System.out.println("Database error:");
