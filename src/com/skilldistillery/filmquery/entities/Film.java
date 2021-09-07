@@ -127,6 +127,17 @@ public class Film {
 	public void setSpecialFeatures(String specialFeatures) {
 		this.specialFeatures = specialFeatures;
 	}
+	
+	public String showFilmInformation() {
+		String information = "Title: " + title + "Release Year: " + releaseYear + "Rating: " + rating + "Description: " + description;
+		return information;
+	}
+	
+	public String fullInformation() {
+		String full = "Title:" + title + "Release Year: " + releaseYear + "Rating: " + rating + "Length: " + length + "mins" + 
+	"Rental Duration: " + rentalDuration + "days" + "Rental Rate: " + rentalRate + "Description: " + description;
+		return full;
+	}
 
 	@Override
 	public int hashCode() {
@@ -150,7 +161,7 @@ public class Film {
 				&& Double.doubleToLongBits(replacementCost) == Double.doubleToLongBits(other.replacementCost)
 				&& Objects.equals(specialFeatures, other.specialFeatures) && Objects.equals(title, other.title);
 	}
-
+ 
 	public List<Actor> getActors() {
 		return actors;
 	}

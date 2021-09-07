@@ -14,23 +14,24 @@ public class FilmQueryApp {
 
 	public static void main(String[] args) {
 		FilmQueryApp app = new FilmQueryApp();
-//    app.test();
+//		app.test();
 		app.launch();
 	}
 
 //  private void test() {
 //    Film film = db.findFilmById(1);
 //    List <Actor> actors = db.findActorsByFilmId(1);
-////    for (Actor actor : actors) {
-////	}
+//    for (Actor actor : actors) {
+//	}
 //    film.setActors(actors);
-////  
+//  
 //   System.out.println(film);
-////   
+//   
 //  }
 
 	private void launch() {
 		Scanner input = new Scanner(System.in);
+		
 		startUserInterface(input);
 		input.close();
 	}
@@ -45,7 +46,7 @@ public class FilmQueryApp {
 				input.nextLine();
 				keepRunning = userSelection(userChoice, input);
 			} catch (InputMismatchException e) {
-				System.out.println("Please enter an integer. Try again.");
+				System.err.println("Please enter an integer. Try again.");
 				input.nextLine();
 			}
 		} while (keepRunning);
@@ -57,21 +58,21 @@ public class FilmQueryApp {
 		case 1:
 			printFilmId();
 			try {
-				int filmId = input.nextInt();
-				input.nextLine();
-				Film film = db.findFilmById(filmId);
+//				System.out.println("What is the film's id?");
+				int id = input.nextInt();
+				Film film = db.findFilmById(id);
 				if (film != null) {
 					runFilmSubmenu(input, film, null);
 				}
-			} catch(InputMismatchException e){
-			System.out.println("Please enter an integer 1-3. Try again.");
-			  input.nextLine();
-		}
-		break;
+			} catch (InputMismatchException e) {
+				System.out.println("Please enter an integer 1-3. Try again.");
+				input.nextLine();
+			}
+			break;
 		case 2:
 			printFilmKeyword();
-			String k = input.nextLine();
-			List<Film> list = db.findFilmByKeyword(k);
+			String keyword = input.nextLine();
+			List<Film> list = db.findFilmByKeyword(keyword);
 			if (list != null) {
 				runFilmSubmenu(input, null, list);
 			}
@@ -85,38 +86,75 @@ public class FilmQueryApp {
 		}
 		return keepRunning;
 	}
-	private void FilmSubmenu(){
+
+	private void runFilmSubmenu(Scanner input, Film film, List<Film> list) {
+		printSubmenu();
+		try {
+			int choice = input.nextInt();
+			input.nextLine();
+			subMenuChoices(choice, film, list);
+		} catch (InputMismatchException e) {
+			System.out.println("Please reenter an integer.");
+			input.nextLine();
+		}
+	}
+		
+	private void subMenuChoices(int choice, Film filmId, List<Film> list) {
+		switch(choice) {
+		case 1:
+			System.out.println("Returning to main menu.");
+			break;
+		case 2:
+			if (list == null) {
+				System.out.println(filmId.toString());
+			}
+			else {
+				for (Film film : list) {
+					System.out.println(film.toString());
+				}
+			}
+			break;
+		default:
+			System.out.println("Not sure what you're looking for pal...returning to main menu.");
+		}
+		
+	}
+
+	private void printSubmenu() {
 		System.out.println("******************************************");
 		System.out.println("*            What's next?                *");
 		System.out.println("*      1. Main Menu                      *");
 		System.out.println("*      2. Print Film Details             *");
-		System.out.println("******************************************");	
+		System.out.println("******************************************");
 	}
-	
-	private void printFilmKeyword(){
+
+	private void printFilmKeyword() {
 		System.out.println("***********************************************");
 		System.out.println("*  What keyword would you like to search by?  *");
 		System.out.println("*     Please provide your selection below.    *");
+		System.out.println("*     										  *");
+		System.out.println("***********************************************");
 	}
-	private void printFilmId(){
-	System.out.println("******************************************");
-	System.out.println("*          What is the film's id?        *");
-	System.out.println("***Please provide your selection below.***");
+
+	private void printFilmId() {
+		System.out.println("******************************************");
+		System.out.println("*          What is the film's id?        *");
+		System.out.println("***Please provide your selection below.***");
 	}
-	
-	private void printMainMenu(){			
-	  System.out.println("********Have*******Money?********We*******Need********It!*********");
-	  System.out.println("*                                                                *");
-	  System.out.println("*             Welcome to Blockbüster Online™:                    *");
-	  System.out.println("*      Later to online sales than most of our late returns!©     *");
-	  System.out.println("*                                                                *");
-	  System.out.println("*                  Please enter a menu option:                   *");
-	  System.out.println("*                                                                *");
-	  System.out.println("*              1:  Look up a film by its Film ID.                *");
-	  System.out.println("*              2:  Look up a film by a search keyword.           *");
-	  System.out.println("*              3:  Exit the Application.                         *");
-	  System.out.println("*                                                                *");
-	  System.out.println("****Seriously****though****can****we****have****your****money?****");
-	  
-			}
+
+	private void printMainMenu() {
+		System.out.println("******************************************************************");
+		System.out.println("*                                                                *");
+		System.out.println("*             Welcome to Blockbüster Online™:                    *");
+		System.out.println("*      Later to online sales than most of our late returns!©     *");
+		System.out.println("*                                                                *");
+		System.out.println("*                  Please enter a menu option:                   *");
+		System.out.println("*                                                                *");
+		System.out.println("*              1:  Look up a film by its Film ID.                *");
+		System.out.println("*              2:  Look up a film by a search keyword.           *");
+		System.out.println("*              3:  Exit the Application.                         *");
+		System.out.println("*                                                                *");
+		System.out.println("******************************************************************");
+
+	}
 }

@@ -50,13 +50,13 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 				film.setSpecialFeatures(rs.getString("special_features"));
 			}
 			rs.close();
-		    stmt.close();
-		    conn.close();
+			stmt.close();
+			conn.close();
 		} catch (SQLException e) {
 			System.err.println("Database error:");
 		}
 		return film;
-	
+
 	}
 
 	@Override
@@ -64,25 +64,24 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 		Actor actor = null;
 		try {
 			Connection conn = DriverManager.getConnection(URL, user, pass);
-			String sql = "SELECT id, first_name, last_name"
-					+ " FROM actor WHERE id = ?";
+			String sql = "SELECT id, first_name, last_name" + " FROM actor WHERE id = ?";
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, actorId);
 			ResultSet as = stmt.executeQuery();
 			if (as.next()) {
-		    actor = new Actor(); 
-		    actor.setActorId(as.getInt("id"));
-		    actor.setFirstName(as.getString("first_name"));
-		    actor.setLastName(as.getString("last_name"));
+				actor = new Actor();
+				actor.setActorId(as.getInt("id"));
+				actor.setFirstName(as.getString("first_name"));
+				actor.setLastName(as.getString("last_name"));
 			}
-			 as.close();
-			 stmt.close();
-			 conn.close();
+			as.close();
+			stmt.close();
+			conn.close();
 		} catch (SQLException e) {
 			System.err.println("Database error:");
 		}
 		return actor;
-		
+
 	}
 
 	@Override
@@ -90,27 +89,73 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 		List<Actor> actors = new ArrayList<>();
 		try {
 			Connection conn = DriverManager.getConnection(URL, user, pass);
-			String sql = "SELECT actor.id, actor.first_name, actor.last_name " +
-			"FROM actor JOIN film_actor ON actor.id = film_actor.actor_id " +
-			"WHERE film_actor.film_id = ?";
+			String sql = "SELECT actor.id, actor.first_name, actor.last_name "
+					+ "FROM actor JOIN film_actor ON actor.id = film_actor.actor_id " + "WHERE film_actor.film_id = ?";
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, filmId);
 			ResultSet af = stmt.executeQuery();
 			while (af.next()) {
-				Actor actor = new Actor(); 
+				Actor actor = new Actor();
 				actor.setActorId(af.getInt("id"));
-			    actor.setFirstName(af.getString("first_name"));
-			    actor.setLastName(af.getString("last_name"));
-			    actors.add(actor);
+				actor.setFirstName(af.getString("first_name"));
+				actor.setLastName(af.getString("last_name"));
+				actors.add(actor);
 			}
 			System.out.println(actors);
 			af.close();
-		    stmt.close();
-		    conn.close();
+			stmt.close();
+			conn.close();
 		} catch (SQLException e) {
 			System.err.println("Database error:");
 		}
 		return actors;
+	}
+
+	@Override
+	public List<Film> findFilmByKeyword(String k) {
+		List<Film> films = new ArrayList<>();
+		try {
+			Connection conn = DriverManager.getConnection(URL, user, pass);
+			String sql = "SELECT id, title, description, release_year, language_id, rental_duration,\"\n"
+					+ "rental_rate, length, replacement_cost, rating, special_features FROM film WHERE (title LIKE ?) OR description LIKE ?)";
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setString(1, "%" + k + "%");
+			stmt.setString(2, "%" + k + "%");
+			ResultSet kw = stmt.executeQuery();
+			while (kw.next()) {
+				int id = kw.getInt("id");
+				Film film = findFilmById(id);
+				films.add(film);
+			}
+			kw.close();
+			stmt.close();
+			conn.close();
+		} catch (SQLException e) {
+			System.out.println("Database error:");
+		}
+		return films;
+	}
+
+	@Override
+	public String findFilmLanguage(int languageId) {
+		String language = null;
+		try {
+			Connection conn = DriverManager.getConnection(URL, user, pass);
+			String sql = "SELECT name from language WHERE id = ?";
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setInt(1,languageId);
+			ResultSet fl = ps.executeQuery();
+			while (fl.next()) {
+				language = fl.getString("name");
+			}
+			fl.close();
+			ps.close();
+			conn.close();
+		} catch (SQLException e) {
+			System.err.println("Database error.");
+		}
+		return language;
+
 	}
 
 }
