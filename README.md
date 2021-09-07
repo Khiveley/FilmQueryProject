@@ -19,6 +19,6 @@ Run FilmQueryApp.java.
 
 I started on this project Friday night as I knew it would likely take considerable time.  I came prepared to TA hours and felt like I made good progress; however, a stomach bug hit our house this weekend with me having to take care of our smallest children.  I have code and am currently chasing down why I am receiving database errors and not returning information about my films.  Hoping that I can get it completed prior to start; however, I may be seeking an extension if permitted.
 
-Updated:  I had at syntax error that was subtle with spacing in my query.  I also was receiving null for my list of actors on each film regardless of methodology.  This was the most maddening aspect. I was able to locate my issues by using debug and adding in a for loop in each of my methods. I will make use of debug to better examine my code in the future.  
+Updated:  I had a syntax error that was subtle with spacing in my query.  I also was receiving null for my list of actors on each film regardless of methodology.  This was the most maddening aspect. I was able to locate my issues by using debug and adding in a for loop in each of my methods. I will make use of debug to better examine my code in the future.  
 
 This has been an incredible challenge.  I'm glad to have completed it, even if due to circumstances it was at the 11th hour.
