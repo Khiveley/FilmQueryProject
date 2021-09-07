@@ -31,8 +31,9 @@ public class FilmQueryApp {
 
 	private void launch() {
 		Scanner input = new Scanner(System.in);
-		
+
 		startUserInterface(input);
+
 		input.close();
 	}
 
@@ -46,7 +47,7 @@ public class FilmQueryApp {
 				input.nextLine();
 				keepRunning = userSelection(userChoice, input);
 			} catch (InputMismatchException e) {
-				System.err.println("Please enter an integer. Try again.");
+				System.out.println("Please enter an integer. Try again.");
 				input.nextLine();
 			}
 		} while (keepRunning);
@@ -56,7 +57,7 @@ public class FilmQueryApp {
 		boolean keepRunning = true;
 		switch (userChoice) {
 		case 1:
-			printFilmId();
+			printFilmIdMenu();
 			try {
 //				System.out.println("What is the film's id?");
 				int id = input.nextInt();
@@ -70,7 +71,7 @@ public class FilmQueryApp {
 			}
 			break;
 		case 2:
-			printFilmKeyword();
+			printFilmKeywordMenu();
 			String keyword = input.nextLine();
 			List<Film> list = db.findFilmByKeyword(keyword);
 			if (list != null) {
@@ -88,7 +89,7 @@ public class FilmQueryApp {
 	}
 
 	private void runFilmSubmenu(Scanner input, Film film, List<Film> list) {
-		printSubmenu();
+		printSubMenu();
 		try {
 			int choice = input.nextInt();
 			input.nextLine();
@@ -98,17 +99,16 @@ public class FilmQueryApp {
 			input.nextLine();
 		}
 	}
-		
+
 	private void subMenuChoices(int choice, Film filmId, List<Film> list) {
-		switch(choice) {
+		switch (choice) {
 		case 1:
 			System.out.println("Returning to main menu.");
 			break;
 		case 2:
 			if (list == null) {
 				System.out.println(filmId.toString());
-			}
-			else {
+			} else {
 				for (Film film : list) {
 					System.out.println(film.toString());
 				}
@@ -117,10 +117,30 @@ public class FilmQueryApp {
 		default:
 			System.out.println("Not sure what you're looking for pal...returning to main menu.");
 		}
-		
+
 	}
 
-	private void printSubmenu() {
+	private List<Film> findFilmByKeyword(String keyword) {
+		List<Film> films = db.findFilmByKeyword(keyword);
+		if (films.size() < 1) {
+			System.out.println("Sorry, I am unable to locate a film by your search term.");
+		} else {
+			for (Film film : films) {
+				displayFilmInformation(film);
+			}
+		}
+		return films;
+	}
+
+	private void displayFilmInformation(Film film) {
+		System.out.println(film.fullInformation());
+		List <Actor> actors = db.findActorsByFilmId(1);
+		for (Actor actor : film.getActors()) {
+		}
+		}
+	
+		
+	private void printSubMenu() {
 		System.out.println("******************************************");
 		System.out.println("*            What's next?                *");
 		System.out.println("*      1. Main Menu                      *");
@@ -128,18 +148,18 @@ public class FilmQueryApp {
 		System.out.println("******************************************");
 	}
 
-	private void printFilmKeyword() {
+	private void printFilmKeywordMenu() {
 		System.out.println("***********************************************");
 		System.out.println("*  What keyword would you like to search by?  *");
-		System.out.println("*     Please provide your selection below.    *");
 		System.out.println("*     										  *");
 		System.out.println("***********************************************");
 	}
 
-	private void printFilmId() {
+	private void printFilmIdMenu() {
 		System.out.println("******************************************");
 		System.out.println("*          What is the film's id?        *");
-		System.out.println("***Please provide your selection below.***");
+		System.out.println("*                                        *");
+		System.out.println("******************************************");
 	}
 
 	private void printMainMenu() {

@@ -42,6 +42,9 @@ public class Actor {
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
+	public String getActorFullName() {
+		return getFirstName() + " " + getLastName();
+	}
 
 	@Override
 	public int hashCode() {

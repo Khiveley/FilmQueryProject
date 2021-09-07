@@ -86,7 +86,7 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 
 	@Override
 	public List<Actor> findActorsByFilmId(int filmId) {
-		List<Actor> actors = new ArrayList<>();
+		List<Actor> actors = new ArrayList<Actor>();
 		try {
 			Connection conn = DriverManager.getConnection(URL, user, pass);
 			String sql = "SELECT actor.id, actor.first_name, actor.last_name "
@@ -113,7 +113,7 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 
 	@Override
 	public List<Film> findFilmByKeyword(String k) {
-		List<Film> films = new ArrayList<>();
+		List<Film> films = new ArrayList<Film>();
 		try {
 			Connection conn = DriverManager.getConnection(URL, user, pass);
 			String sql = "SELECT id, title, description, release_year, language_id, rental_duration,\"\n"
