@@ -62,6 +62,8 @@ public class FilmQueryApp {
 				int id = input.nextInt();
 				input.nextLine();
 				Film film = db.findFilmById(id);
+				film.setActors(db.findActorsByFilmId(id));
+				film.setLanguage(db.findFilmLanguage(film.getLanguageId()));
 				if (film != null) {
 					runFilmSubmenu(input, film, null);
 				}
@@ -74,6 +76,10 @@ public class FilmQueryApp {
 			printFilmKeywordMenu();
 			String keyword = input.nextLine();
 			List<Film> list = db.findFilmByKeyword(keyword);
+			for(Film film: list) {
+				film.setActors(db.findActorsByFilmId(film.getFilmId()));
+				film.setLanguage(db.findFilmLanguage(film.getLanguageId()));
+			}
 			if (list != null) {
 				runFilmSubmenu(input, null, list);
 			}
@@ -111,7 +117,6 @@ public class FilmQueryApp {
 			} else {
 				for (Film film : list) {
 					System.out.println(film.toString());
-					System.out.println("---------");
 				}
 			}
 			break;

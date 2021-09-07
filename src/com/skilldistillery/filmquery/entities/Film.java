@@ -24,8 +24,7 @@ public class Film {
 	}
 
 	public Film(int filmId, String title, String description, int releaseYear, int languageId, int rentalDuration,
-			double rentalRate, int length, double replacementCost, String rating, String specialFeatures,
-			List<Actor> actors) {
+			double rentalRate, int length, double replacementCost, String rating, String specialFeatures) {
 		super();
 		this.filmId = filmId;
 		this.title = title;
@@ -39,7 +38,7 @@ public class Film {
 		this.rating = rating;
 		this.setLanguage(language);
 		this.specialFeatures = specialFeatures;
-		this.actors = actors;
+
 	}
 
 	public int getFilmId() {
@@ -184,13 +183,13 @@ public class Film {
 
 	@Override
 	public String toString() {
-		if (actors.size() == 0) {
-			return "Film id: " + filmId + " " + "Title: " + title + "\n" + "Description: " + description + "\n" + "\n"
-					+ "Release Year: " + releaseYear + " " + "Language Id: " + languageId + " " + "Rental Duration: "
-					+ rentalDuration + " " + "Rental Rate: " + rentalRate + "\n" + "Length: " + length + " mins "
-					+ "Replacement Cost: " + replacementCost + " " + "Rating: " + rating + " " + "Special Features: "
-					+ specialFeatures + "\n" + "\n" + "All rates and costs listed in USD. Be Kind. Please Rewind.";
-		} else {
+//		if (actors.size() == 0) {
+//			return "Film id: " + filmId + " " + "Title: " + title + "\n" + "Description: " + description + "\n" + "\n"
+//					+ "Release Year: " + releaseYear + " " + "Language Id: " + languageId + " " + "Rental Duration: "
+//					+ rentalDuration + " " + "Rental Rate: " + rentalRate + "\n" + "Length: " + length + " mins "
+//					+ "Replacement Cost: " + replacementCost + " " + "Rating: " + rating + " " + "Special Features: "
+//					+ specialFeatures + "\n" + "\n" + "All rates and costs listed in USD. Be Kind. Please Rewind.";
+//		} else {
 			StringBuilder sb = new StringBuilder("Film [id=").append(filmId).append(", title=").append(title)
 					.append(", description=").append(description).append(", releaseYear=").append(releaseYear)
 					.append(", languageId=").append(languageId).append(", rentalDuration=").append(rentalDuration)
@@ -203,7 +202,7 @@ public class Film {
 			sb.append("]");
 			return sb.toString();
 		}
-	}
+	
 
 	public void setName(String string) {
 		// TODO Auto-generated method stub

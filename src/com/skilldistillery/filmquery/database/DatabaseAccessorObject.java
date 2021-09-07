@@ -30,15 +30,10 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 		Film film = null;
 		try {
 			Connection conn = DriverManager.getConnection(URL, user, pass);
-//			String sql = "SELECT id, title, description, release_year, language_id, rental_duration,"
-//					+ "rental_rate, length, replacement_cost, rating, special_features " +
-//					+ "JOIN language ON film.language_id = language.id  "
-//					" FROM film WHERE film.id = ?";
-			
 			String sql = "SELECT id, title, description, release_year, language_id, rental_duration,"
 					+ "rental_rate, length, replacement_cost, rating, special_features "
-					+ "JOIN language ON film.language_id = language.id  "
-					+ "WHERE film.id = ?";
+					+"FROM film WHERE film.id = ?";
+
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, filmId);
 			ResultSet rs = stmt.executeQuery();
@@ -55,13 +50,12 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 				film.setReplacementCost(rs.getDouble("replacement_cost"));
 				film.setRating(rs.getString("rating"));
 				film.setSpecialFeatures(rs.getString("special_features"));
-				film.setName(rs.getString("name"));
 			}
 			rs.close();
 			stmt.close();
 			conn.close();
 		} catch (SQLException e) {
-			System.err.println("Database error:");
+			System.err.println("Database error:" + e);
 		}
 		return film;
 
@@ -109,7 +103,6 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 				actor.setLastName(af.getString("last_name"));
 				actors.add(actor);
 			}
-			System.out.println(actors);
 			af.close();
 			stmt.close();
 			conn.close();
